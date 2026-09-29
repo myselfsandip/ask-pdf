@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-serif: var(--font-source-serif);
+  --font-sans: var(--font-plex-sans);
+
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-marker: var(--marker);
+  --color-marker-soft: var(--marker-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-foreground);
+  --color-muted: var(--surface-muted);
+  --color-muted-foreground: var(--ink-muted);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--ink);
+  --color-secondary: var(--surface-muted);
+  --color-secondary-foreground: var(--ink);
+  --color-destructive: var(--danger);
+  --color-destructive-foreground: #ffffff;
+  --color-input: var(--border);
+  --color-ring: var(--accent);
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+:root {
+  --paper: #f2f3ef;
+  --surface: #ffffff;
+  --surface-muted: #ebece7;
+  --ink: #1a1d1f;
+  --ink-muted: #5b6168;
+  --border: #dfe1db;
+  --accent: #2e4374;
+  --accent-hover: #24345c;
+  --accent-foreground: #ffffff;
+  --marker: #e8a33d;
+  --marker-soft: #fbeed7;
+  --danger: #b3432b;
+  --danger-soft: #f6e2dc;
+  --success: #4c7a5b;
+  --success-soft: #e3ebe4;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+.font-serif-display {
+  font-family: var(--font-serif);
+}
+
+::selection {
+  background: var(--marker-soft);
+  color: var(--ink);
+}
+
+.mark-underline {
+  background-image: linear-gradient(var(--marker-soft), var(--marker-soft));
+  background-repeat: no-repeat;
+  background-size: 100% 0.4em;
+  background-position: 0 88%;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.45s ease-out both;
+}
+
+@layer base {
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
