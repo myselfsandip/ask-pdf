@@ -9,6 +9,13 @@ import { Env } from "../config/env.config.js";
 import { ensureQdrantCollection } from "../config/qdrant.js";
 import { getEmbeddings, embedTextsIndividually } from "../services/embedding.service.js";
 import { Documents } from "../models/Document.js";
+import fs from "fs/promises";
+import mongoose from "mongoose";
+import os from "os";
+import path from "path";
+import { pipeline } from "stream/promises";
+import { getGridFSBucket } from "../config/gridfs.js";
+import { createWriteStream } from "fs";
 
 
 await connectDB();
@@ -17,13 +24,24 @@ await ensureQdrantCollection();
 const worker = new Worker(
   "file-upload-queue",
   async (job) => {
-    const { documentId, filename, path } = job.data;
+    const { documentId, filename, fileId } = job.data;
+
+    let tempFilePath: string | null = null;
 
     try {
       await Documents.updateOne({ _id: documentId }, { $set: { status: "PROCESSING" } });
       await job.updateProgress(10);
 
-      const loader = new PDFLoader(path);
+      // Download the file from GridFS to a temp location
+      const bucket = getGridFSBucket();
+      const objectId = new mongoose.Types.ObjectId(fileId as string);
+      const downloadStream = bucket.openDownloadStream(objectId);
+      tempFilePath = path.join(os.tmpdir(), `${documentId}-${filename}`);
+      await pipeline(downloadStream, createWriteStream(tempFilePath));
+
+      await job.updateProgress(20);
+
+      const loader = new PDFLoader(tempFilePath);
       const docs = await loader.load();
       await job.updateProgress(30);
 
@@ -34,7 +52,7 @@ const worker = new Worker(
       const chunks = await textSplitter.splitDocuments(docs);
       await job.updateProgress(50);
 
-      
+
       const nonEmptyChunks = chunks.filter((chunk) => chunk.pageContent.trim().length > 0);
 
       if (nonEmptyChunks.length === 0) {
@@ -59,7 +77,7 @@ const worker = new Worker(
         return chunk;
       });
 
-     
+
       const vectors = await embedTextsIndividually(chunksWithMetadata.map((chunk) => chunk.pageContent));
       await job.updateProgress(70);
 
@@ -76,7 +94,7 @@ const worker = new Worker(
         collectionName: Env.QDRANT_COLLECTION,
       });
 
-     
+
       await vectorStore.addVectors(vectors, chunksWithMetadata);
       await job.updateProgress(90);
 

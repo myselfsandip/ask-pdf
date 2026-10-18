@@ -9,7 +9,9 @@ import {
     listAllDocuments,
     uploadDocument,
 } from "../services/document.service.js";
-import { UnauthorizedException } from "../utils/app-error.js";
+import { NotFoundException, UnauthorizedException } from "../utils/app-error.js";
+import { Documents } from "../models/Document.js";
+import { getGridFSBucket } from "../config/gridfs.js";
 
 const documentParamsSchema = z.object({
     documentId: z.string().min(1, "documentId is required"),
@@ -76,3 +78,20 @@ export const deleteDocumentController = asyncHandler(
         });
     }
 )
+
+export const downloadDocumentController = asyncHandler(async (req: Request, res: Response) => {
+    const { userId } = getAuth(req);
+    if (!userId) throw new UnauthorizedException();
+
+    const { documentId } = documentParamsSchema.parse(req.params);
+    const document = await Documents.findOne({ _id: documentId, userId });
+    if (!document) throw new NotFoundException("Document Not Found");
+
+    const bucket = getGridFSBucket();
+    const downloadStream = bucket.openDownloadStream(document.fileId);
+
+    res.set("Content-Type", "application/pdf");
+    res.set("Content-Disposition", `attachment; filename="${document.filename}"`);
+
+    downloadStream.pipe(res);
+});

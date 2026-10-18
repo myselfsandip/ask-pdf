@@ -5,6 +5,8 @@ import { BadRequestException, NotFoundException, UnauthorizedException } from ".
 import { documentQueue } from "../queues/document.queue.js";
 import { Documents } from "../models/Document.js";
 import { deleteVectorsForDocument } from "./retrieval.service.js";
+import mongoose from "mongoose";
+import { getGridFSBucket } from "../config/gridfs.js";
 
 export const uploadDocument = async (req: Request) => {
     if (!req.file) {
@@ -14,13 +16,14 @@ export const uploadDocument = async (req: Request) => {
         throw new UnauthorizedException();
     }
 
-    const absolutePath = path.resolve(req.file.path);
+    const fileId = req.file.id as mongoose.Types.ObjectId;
     const fileName = req.file.originalname;
+
 
     const document = await Documents.create({
         userId: req.userId,
         filename: fileName,
-        path: absolutePath,
+        fileId,
         status: "UPLOADED",
         uploadedAt: new Date(),
     });
@@ -29,7 +32,7 @@ export const uploadDocument = async (req: Request) => {
     const job = await documentQueue.add('file-ready', {
         documentId: document._id.toString(),
         filename: fileName,
-        path: absolutePath,
+        fileId: fileId.toString(),
     });
 
     return {
@@ -66,13 +69,16 @@ export const deleteDocument = async (documentId: string, userId: string) => {
 
     await deleteVectorsForDocument(documentId);
 
+    const bucket = getGridFSBucket();
     try {
-        await fs.unlink(document.path);
+        await bucket.delete(document.fileId);
     } catch (err) {
-        console.warn(`Could not delete file at ${document.path}:`, err);
+        console.warn(`File ${document.fileId} could not be deleted:`, err);
     }
 
     await Documents.deleteOne({ _id: documentId });
+
+    console.log(`${document.fileId} is deleted successfully`);
 
     return { deleted: true };
 }

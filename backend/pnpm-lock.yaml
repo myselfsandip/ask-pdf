@@ -13,7 +13,7 @@ importers:
         version: 2.1.67(express@5.2.1)
       '@langchain/community':
         specifier: ^1.1.29
-        version: 1.1.29(@browserbasehq/sdk@2.20.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.63.0)(deepmerge@4.3.1)(dotenv@17.4.2)(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(zod@4.4.3))(@ibm-cloud/watsonx-ai@1.7.16)(@langchain/core@1.2.11(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(ws@8.21.3))(@qdrant/js-client-rest@1.19.0(typescript@6.0.3))(google-auth-library@11.0.2)(ibm-cloud-sdk-core@5.6.1)(ioredis@6.0.0)(jsonwebtoken@9.0.3)(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(pdf-parse@2.4.5)(playwright@1.63.0)(undici@7.29.0)(ws@8.21.3)
+        version: 1.1.29(@browserbasehq/sdk@2.20.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.63.0)(deepmerge@4.3.1)(dotenv@17.4.2)(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(zod@4.4.3))(@ibm-cloud/watsonx-ai@1.7.16)(@langchain/core@1.2.11(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(ws@8.21.3))(@qdrant/js-client-rest@1.19.0(typescript@6.0.3))(google-auth-library@11.0.2)(ibm-cloud-sdk-core@5.6.1)(ioredis@6.0.0)(jsonwebtoken@9.0.3)(mongodb@7.2.0)(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(pdf-parse@2.4.5)(playwright@1.63.0)(undici@7.29.0)(ws@8.21.3)
       '@langchain/core':
         specifier: ^1.2.11
         version: 1.2.11(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(ws@8.21.3)
@@ -62,6 +62,9 @@ importers:
       multer:
         specifier: ^2.0.2
         version: 2.2.0
+      multer-gridfs-storage:
+        specifier: ^6.2.2
+        version: 6.2.2(@types/multer@2.1.0)(mongodb@7.2.0)(multer@2.2.0)
       nanoid:
         specifier: ^5.1.6
         version: 5.1.14
@@ -1206,6 +1209,9 @@ packages:
     resolution: {integrity: sha512-Q0n9HRi4m6JuGIV1eFlmvJB7ZEVxu93IrMyiMsGC0lrMJMWzRgx6WGquyfQgZVb31vhGgXnfmPNNXmxnOkRBrg==}
     engines: {node: '>= 0.8'}
 
+  end-of-stream@1.4.5:
+    resolution: {integrity: sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==}
+
   es-define-property@1.0.1:
     resolution: {integrity: sha512-e3nRfgfUZ4rNGL232gUgX06QNyyez04KdjFrF+LTRoOXmrOgFKDg4BCdsjW8EnT69eqdYGmRpJwiPVYNrCaW3g==}
     engines: {node: '>= 0.4'}
@@ -1427,6 +1433,9 @@ packages:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
     engines: {node: '>= 0.10'}
 
+  is-generator@1.0.3:
+    resolution: {integrity: sha512-G56jBpbJeg7ds83HW1LuShNs8J73Fv3CPz/bmROHOHlnKkN8sWb9ujiagjmxxMUywftgq48HlBZELKKqFLk0oA==}
+
   is-promise@4.0.0:
     resolution: {integrity: sha512-hvpoI6korhJMnej285dSg6nu1+e6uxs7zG3BYAm5byqDsgJNWwxzM6z6iZiAgQR4TJ30JmBTOwqZUw3WlyH3AQ==}
 
@@ -1576,6 +1585,10 @@ packages:
     resolution: {integrity: sha512-h0AZ9A7IDVwwHyMxmdMXKy+9oNlF0zFoahHiX3vQ8e3KFcSP3VmsmfvtRSuLPxmyv2vjIDxqty8smTgie/SNRQ==}
     engines: {node: '>=20.19.0'}
 
+  mongodb-connection-string-url@7.0.2:
+    resolution: {integrity: sha512-ZoS07RoFqpKYQwAk59qmrx8+jJHNHU30UjlU96QktiGn1ltvDr+vCznLX5DiUBLEpMAHatHNWV1nM/74ul66kA==}
+    engines: {node: '>=20.19.0'}
+
   mongodb@7.2.0:
     resolution: {integrity: sha512-F/2+BMZtLVhY30ioZp0dAmZ+IRZMBqI+nrv6t5+9/1AIwCa8sMRC3jBf81lpxMhnZgqq8CoUD503Z1oZWq1/sw==}
     engines: {node: '>=20.19.0'}
@@ -1627,6 +1640,17 @@ packages:
 
   msgpackr@2.1.0:
     resolution: {integrity: sha512-p/pBCVO63CsvvpkomUnNNag6+n38rULuDA6HHe70o2gtC8ODI52foF/4ko2qQcp6OiErJXTmrZeXmsGGHsIQNQ==}
+
+  multer-gridfs-storage@6.2.2:
+    resolution: {integrity: sha512-HuoNvQxyHG9aTWpb9J4x3mWtel1Kctg4T27mLX/jr2kFoRYopoaPKjk8DeEbPeBIzzVLufoQDXPUmlpxxSflMA==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      '@types/multer': ^2.2.0
+      mongodb: ^7.5.0
+      multer: ^2.2.0
+    peerDependenciesMeta:
+      '@types/multer':
+        optional: true
 
   multer@2.2.0:
     resolution: {integrity: sha512-6rdyFg2kLrMh9Jee7/BMPuV9lEAd7lLW2YUpF9/YxR7njyoUwwQ0ZPh3TaIY50Sw6vlyD2HW3wGOkTS4P79xrQ==}
@@ -1786,6 +1810,9 @@ packages:
 
   psl@1.15.0:
     resolution: {integrity: sha512-JZd3gMVBAVQkSs6HdNZo9Sdo0LNcQeMNP3CozBJb3JYC/QUYZTnKxP+f8oWRX4rHP5EurWxqAHTSwUCjlNKa1w==}
+
+  pump@3.0.4:
+    resolution: {integrity: sha512-VS7sjc6KR7e1ukRFhQSY5LM2uBWAUPiOPa/A3mkKmiMwSmRFUITt0xuj+/lesgnCv+dPIEYlkzrcyXgquIHMcA==}
 
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
@@ -2293,7 +2320,7 @@ snapshots:
       - undici
       - ws
 
-  '@langchain/community@1.1.29(@browserbasehq/sdk@2.20.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.63.0)(deepmerge@4.3.1)(dotenv@17.4.2)(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(zod@4.4.3))(@ibm-cloud/watsonx-ai@1.7.16)(@langchain/core@1.2.11(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(ws@8.21.3))(@qdrant/js-client-rest@1.19.0(typescript@6.0.3))(google-auth-library@11.0.2)(ibm-cloud-sdk-core@5.6.1)(ioredis@6.0.0)(jsonwebtoken@9.0.3)(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(pdf-parse@2.4.5)(playwright@1.63.0)(undici@7.29.0)(ws@8.21.3)':
+  '@langchain/community@1.1.29(@browserbasehq/sdk@2.20.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.63.0)(deepmerge@4.3.1)(dotenv@17.4.2)(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(zod@4.4.3))(@ibm-cloud/watsonx-ai@1.7.16)(@langchain/core@1.2.11(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(ws@8.21.3))(@qdrant/js-client-rest@1.19.0(typescript@6.0.3))(google-auth-library@11.0.2)(ibm-cloud-sdk-core@5.6.1)(ioredis@6.0.0)(jsonwebtoken@9.0.3)(mongodb@7.2.0)(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(pdf-parse@2.4.5)(playwright@1.63.0)(undici@7.29.0)(ws@8.21.3)':
     dependencies:
       '@browserbasehq/stagehand': 1.14.0(@playwright/test@1.63.0)(deepmerge@4.3.1)(dotenv@17.4.2)(openai@7.15.0(undici@7.29.0)(ws@8.21.3)(zod@4.4.3))(zod@4.4.3)
       '@ibm-cloud/watsonx-ai': 1.7.16
@@ -2315,6 +2342,7 @@ snapshots:
       google-auth-library: 11.0.2
       ioredis: 6.0.0
       jsonwebtoken: 9.0.3
+      mongodb: 7.2.0
       pdf-parse: 2.4.5
       playwright: 1.63.0
       ws: 8.21.3
@@ -2780,6 +2808,10 @@ snapshots:
 
   encodeurl@2.0.0: {}
 
+  end-of-stream@1.4.5:
+    dependencies:
+      once: 1.4.0
+
   es-define-property@1.0.1: {}
 
   es-errors@1.3.0: {}
@@ -3068,7 +3100,7 @@ snapshots:
       jsonwebtoken: 9.0.3
       load-esm: 1.0.3
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.20.0)
+      retry-axios: 2.6.0(axios@1.20.0(debug@4.3.4))
       tough-cookie: 4.1.3
     transitivePeerDependencies:
       - supports-color
@@ -3095,6 +3127,8 @@ snapshots:
   ip-address@10.2.0: {}
 
   ipaddr.js@1.9.1: {}
+
+  is-generator@1.0.3: {}
 
   is-promise@4.0.0: {}
 
@@ -3218,6 +3252,11 @@ snapshots:
       '@types/whatwg-url': 13.0.0
       whatwg-url: 14.2.0
 
+  mongodb-connection-string-url@7.0.2:
+    dependencies:
+      '@types/whatwg-url': 13.0.0
+      whatwg-url: 14.2.0
+
   mongodb@7.2.0:
     dependencies:
       '@mongodb-js/saslprep': 1.4.11
@@ -3264,6 +3303,17 @@ snapshots:
   msgpackr@2.1.0:
     optionalDependencies:
       msgpackr-extract: 3.0.4
+
+  multer-gridfs-storage@6.2.2(@types/multer@2.1.0)(mongodb@7.2.0)(multer@2.2.0):
+    dependencies:
+      is-generator: 1.0.3
+      lodash.isplainobject: 4.0.6
+      mongodb: 7.2.0
+      mongodb-connection-string-url: 7.0.2
+      multer: 2.2.0
+      pump: 3.0.4
+    optionalDependencies:
+      '@types/multer': 2.1.0
 
   multer@2.2.0:
     dependencies:
@@ -3375,6 +3425,11 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
+  pump@3.0.4:
+    dependencies:
+      end-of-stream: 1.4.5
+      once: 1.4.0
+
   punycode@2.3.1: {}
 
   qs@6.15.2:
@@ -3402,7 +3457,7 @@ snapshots:
 
   requires-port@1.0.0: {}
 
-  retry-axios@2.6.0(axios@1.20.0):
+  retry-axios@2.6.0(axios@1.20.0(debug@4.3.4)):
     dependencies:
       axios: 1.20.0(debug@4.3.4)
 
