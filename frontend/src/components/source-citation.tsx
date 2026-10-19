@@ -12,10 +12,11 @@ export function SourceCitation({ sources }: { sources: Source[] }) {
       </span>
       {sources.map((source, i) => (
         <span
-          key={`${source.filename}-${source.pageNumber}-${i}`}
+          key={`${source.filename}-${source.pageNumber ?? "na"}-${i}`}
           className="mark-underline rounded-sm px-1 text-xs text-ink"
         >
-          {source.filename} — page {source.pageNumber}
+          {source.filename}
+          {source.pageNumber != null && ` — page ${source.pageNumber}`}
         </span>
       ))}
     </div>

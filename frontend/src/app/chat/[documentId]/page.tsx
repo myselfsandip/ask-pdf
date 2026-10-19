@@ -40,7 +40,7 @@ export default function ChatPage() {
     <div className="flex h-screen flex-col">
       <SiteHeader documentTitle={filename} />
       <ChatWindow messages={messages} historyLoading={historyLoading} />
-      <ChatInput onSend={ask} disabled={isStreaming} />
+      <ChatInput onSend={ask} disabled={isStreaming || historyLoading} />
     </div>
   );
 }

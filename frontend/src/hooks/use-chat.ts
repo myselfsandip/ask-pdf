@@ -14,22 +14,37 @@ export function useChat(documentId: string, initialConversationId?: string) {
   );
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [historyLoading, setHistoryLoading] = useState(Boolean(initialConversationId));
+  const [historyLoading, setHistoryLoading] = useState(true);
+
 
   useEffect(() => {
-    if (!initialConversationId) return;
+    let cancelled = false;
+
     (async () => {
       try {
-        const history = await api.getConversation(initialConversationId, getToken);
-        setMessages(history);
+        if (initialConversationId) {
+          const history = await api.getConversation(initialConversationId, getToken);
+          if (!cancelled) setMessages(history);
+        } else {
+          const { conversationId: latestId, messages: history } =
+            await api.getDocumentConversation(documentId, getToken);
+          if (cancelled) return;
+          if (latestId) {
+            setConversationId(latestId); // so the next question continues this conversation
+            setMessages(history);
+          }
+        }
       } catch {
-        // A missing conversation just starts fresh — not fatal.
       } finally {
-        setHistoryLoading(false);
+        if (!cancelled) setHistoryLoading(false);
       }
     })();
+
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialConversationId]);
+  }, [documentId, initialConversationId]);
 
   const ask = useCallback(
     async (question: string) => {
@@ -84,11 +99,11 @@ export function useChat(documentId: string, initialConversationId?: string) {
               prev.map((m) =>
                 m._id === assistantId
                   ? {
-                      ...m,
-                      streaming: false,
-                      content:
-                        m.content || "Something went wrong while generating this answer.",
-                    }
+                    ...m,
+                    streaming: false,
+                    content:
+                      m.content || "Something went wrong while generating this answer.",
+                  }
                   : m
               )
             );

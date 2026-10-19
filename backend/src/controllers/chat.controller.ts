@@ -3,7 +3,7 @@ import { z } from "zod";
 import { getAuth } from "@clerk/express";
 import { asyncHandler } from "../config/asyncHandler.js";
 import { HTTPSTATUS } from "../config/http.config.js";
-import { answerQuestion, getConversationMessages } from "../services/chat.service.js";
+import { answerQuestion, getConversationMessages, getDocumentConversation } from "../services/chat.service.js";
 import { UnauthorizedException } from "../utils/app-error.js";
 import { logger } from "../config/winston.js";
 
@@ -67,6 +67,27 @@ export const getConversationController = asyncHandler(async (req: Request, res: 
     return res.status(HTTPSTATUS.OK).json({
         success: true,
         message: "Conversation fetched successfully",
+        messages,
+    });
+});
+
+const documentParamsSchema = z.object({
+    documentId: z.string().min(1, "documentId is required"),
+});
+
+export const getDocumentConversationController = asyncHandler(async (req: Request, res: Response) => {
+    const { userId } = getAuth(req);
+    if (!userId) {
+        throw new UnauthorizedException();
+    }
+
+    const { documentId } = documentParamsSchema.parse(req.params);
+    const { conversationId, messages } = await getDocumentConversation(documentId, userId);
+
+    return res.status(HTTPSTATUS.OK).json({
+        success: true,
+        message: "Conversation fetched successfully",
+        conversationId,
         messages,
     });
 });

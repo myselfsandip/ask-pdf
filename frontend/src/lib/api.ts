@@ -62,12 +62,23 @@ export const api = {
 
 
   async getConversation(conversationId: string, getToken?: TokenGetter): Promise<Message[]> {
-    const res = await fetch(`${API_URL}/chat/conversations/${conversationId}`, {
+    const res = await fetch(`${API_URL}/chat/conversations/${conversationId}`, {   
       headers: await authHeaders(getToken),
       cache: "no-store",
     });
     const data = await handle<{ messages: Message[] } | Message[]>(res);
     return Array.isArray(data) ? data : data.messages;
+  },
+
+  async getDocumentConversation(
+    documentId: string,
+    getToken?: TokenGetter
+  ): Promise<{ conversationId: string | null; messages: Message[] }> {
+    const res = await fetch(`${API_URL}/chat/documents/${documentId}/conversation`, {
+      headers: await authHeaders(getToken),
+      cache: "no-store",
+    });
+    return handle<{ conversationId: string | null; messages: Message[] }>(res);
   },
 
 

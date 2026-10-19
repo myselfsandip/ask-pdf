@@ -126,17 +126,17 @@ export async function* answerQuestion({
         yield { type: "token", value: token };
     }
 
-    await Messages.create({
-        userId,
-        conversationId: conversationIdStr,
-        role: "assistant",
-        content: fullAnswer,
-    });
+    // const sources = chunks.map((c) => ({ filename: c.filename, pageNumber: c.pageNumber }));
 
-    yield {
-        type: "sources",
-        value: chunks.map((c) => ({ filename: c.filename, pageNumber: c.pageNumber })),
-    };
+    const sources = Array.from(
+        new Map(
+            chunks.map((c) => [`${c.filename}:${c.pageNumber ?? ""}`, { filename: c.filename, pageNumber: c.pageNumber }])
+        ).values()
+    );
+
+    await Messages.create({ userId, conversationId: conversationIdStr, role: "assistant", content: fullAnswer, sources });
+
+    yield { type: "sources", value: sources };
 }
 
 export async function getConversationMessages(conversationId: string, userId: string) {
@@ -145,4 +145,23 @@ export async function getConversationMessages(conversationId: string, userId: st
         throw new NotFoundException("Conversation not found", ErrorCodeEnum.CONVERSATION_NOT_FOUND);
     }
     return Messages.find({ conversationId }).sort({ createdAt: 1 }).lean();
+}
+
+
+
+export async function getDocumentConversation(documentId: string, userId: string) {
+    const document = await Documents.findOne({ _id: documentId, userId });
+    if (!document) {
+        throw new NotFoundException("Document not found");
+    }
+
+    const conversation = await Conversations.findOne({ documentId, userId }).sort({ updatedAt: -1 });
+    if (!conversation) {
+        return { conversationId: null, messages: [] };
+    }
+
+    const conversationId = conversation._id.toString();
+    const messages = await Messages.find({ conversationId }).sort({ createdAt: 1 }).lean();
+
+    return { conversationId, messages };
 }

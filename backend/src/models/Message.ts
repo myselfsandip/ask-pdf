@@ -5,6 +5,7 @@ export interface IMessage extends Document {
     conversationId: string;
     role: "user" | "assistant";
     content: string;
+    sources?: { filename: string; pageNumber?: number | null }[];
 }
 
 const messageSchema = new Schema<IMessage>(
@@ -30,6 +31,7 @@ const messageSchema = new Schema<IMessage>(
             type: String,
             required: true,
         },
+        sources: [{ filename: String, pageNumber: Number, _id: false }],
     },
     { timestamps: true },
 );

@@ -13,7 +13,7 @@ export interface AskPdfDocument {
 
 export interface Source {
   filename: string;
-  pageNumber: number;
+  pageNumber?: number | null;
 }
 
 export type MessageRole = "user" | "assistant";
@@ -25,7 +25,6 @@ export interface Message {
   content: string;
   sources?: Source[];
   createdAt: string;
-  /** client-side only: true while an assistant message is still streaming in */
   streaming?: boolean;
 }
 
